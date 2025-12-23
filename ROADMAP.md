@@ -28,7 +28,7 @@ sem overengineering.
 ## 📱 Fase 1 – App Mobile (MVP)
 ### Objetivo: interface funcional para disparar comandos
 
-- [ ] Criar projeto Flutter
+- [X] Criar projeto Flutter
 - [ ] Estrutura básica do app (MaterialApp)
 - [ ] Tela inicial
 - [ ] Layout com lista de cards
