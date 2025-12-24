@@ -26,7 +26,7 @@ class _HomeView extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: GridView.builder(
-          itemCount: viewModel.commands.length + 1,
+          itemCount: viewModel.commandCards.length + 1,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 12,
@@ -34,8 +34,8 @@ class _HomeView extends StatelessWidget {
             childAspectRatio: 1.2,
           ),
           itemBuilder: (context, index) {
-            if (index < viewModel.commands.length) {
-              final command = viewModel.commands[index];
+            if (index < viewModel.commandCards.length) {
+              final command = viewModel.commandCards[index];
               return CommandCard(
                 model: command,
                 onTap: () {
