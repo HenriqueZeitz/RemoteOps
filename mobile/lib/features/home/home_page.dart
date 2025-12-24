@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/widgets/add_command_dialog.dart';
 import 'package:provider/provider.dart';
 import 'home_view_model.dart';
 import 'home_widgets.dart';
@@ -49,7 +50,11 @@ class _HomeView extends StatelessWidget {
               icon: Icons.add,
               size: 64,
               onTap: () {
-                // futuramente: adicionar novo comando
+                final viewModel = context.read<HomeViewModel>();
+                showDialog(
+                  context: context,
+                  builder: (_) => AddCommandDialog(viewModel: viewModel),
+                );
               },
             );
           },

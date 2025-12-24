@@ -33,11 +33,11 @@ sem overengineering.
 - [X] Tela inicial
 - [X] Layout com lista de cards
 - [X] Card especial “+ Adicionar comando”
-- [ ] Modal/tela para cadastrar novo comando
-- [ ] Modelo de dados do comando (nome, descrição, comando)
-- [ ] Persistência local (SharedPreferences / JSON)
-- [ ] Carregar comandos ao abrir o app
-- [ ] Renderizar cards dinamicamente
+- [X] Modal/tela para cadastrar novo comando
+- [X] Modelo de dados do comando (nome, descrição, comando)
+- [X] Persistência local (SharedPreferences / JSON)
+- [X] Carregar comandos ao abrir o app
+- [X] Renderizar cards dinamicamente
 - [ ] Clique no card dispara requisição HTTP
 
 ---

@@ -11,14 +11,18 @@ class HomeViewModel extends ChangeNotifier {
     _loadCommands();
   }
 
+  Future<void> addCommand(CommandCardModel command) async {
+    commandCards.add(command);
+    await _storageService.saveCommands(commandCards);
+    notifyListeners();
+  }
+
   Future<void> _loadCommands() async {
     commandCards = await _storageService.loadCommands();
-
     if (commandCards.isEmpty) {
       commandCards = _defaultCommands();
       await _storageService.saveCommands(commandCards);
     }
-
     notifyListeners();
   }
 
@@ -56,9 +60,9 @@ class CommandCardModel {
   final IconData icon;
   final String title;
   final String description;
-  final bool isRunning;
   final String startCommand;
   final String stopCommand;
+  final bool isRunning;
 
   CommandCardModel({
     required this.icon,
