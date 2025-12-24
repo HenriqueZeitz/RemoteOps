@@ -29,10 +29,10 @@ sem overengineering.
 ### Objetivo: interface funcional para disparar comandos
 
 - [X] Criar projeto Flutter
-- [ ] Estrutura básica do app (MaterialApp)
-- [ ] Tela inicial
-- [ ] Layout com lista de cards
-- [ ] Card especial “+ Adicionar comando”
+- [X] Estrutura básica do app (MaterialApp)
+- [X] Tela inicial
+- [X] Layout com lista de cards
+- [X] Card especial “+ Adicionar comando”
 - [ ] Modal/tela para cadastrar novo comando
 - [ ] Modelo de dados do comando (nome, descrição, comando)
 - [ ] Persistência local (SharedPreferences / JSON)
