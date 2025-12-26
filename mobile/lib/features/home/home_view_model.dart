@@ -67,8 +67,16 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleComputerStatus() {
+  void powerOnComputer() {
     computerOnline = !computerOnline;
+    notifyListeners();
+  }
+
+  void powerOffComputer() {
+    computerOnline = false;
+    commandCards = commandCards
+      .map((c) => c.copyWith(isRunning: false))
+      .toList();
     notifyListeners();
   }
 }

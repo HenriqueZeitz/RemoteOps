@@ -101,10 +101,7 @@ class _HomeView extends StatelessWidget {
           ignoring: viewModel.isExecutingCommand,
           child: _BottomBar(
             isOnline: viewModel.computerOnline,
-            onPowerPressed: viewModel.isExecutingCommand
-              ? null
-              : viewModel.toggleComputerStatus,
-            computerOnline: viewModel.computerOnline,
+            viewModel: viewModel,
           ),
         ),
       ),
@@ -114,13 +111,11 @@ class _HomeView extends StatelessWidget {
 
 class _BottomBar extends StatelessWidget {
   final bool isOnline;
-  final VoidCallback? onPowerPressed;
-  final bool computerOnline;
+  final HomeViewModel viewModel;
 
   const _BottomBar({
     required this.isOnline,
-    required this.onPowerPressed,
-    required this.computerOnline,
+    required this.viewModel,
   });
 
   @override
@@ -132,8 +127,8 @@ class _BottomBar extends StatelessWidget {
       child: Center(
         child: IconButton(
           iconSize: 32,
-          onPressed:  computerOnline ? (){} : onPowerPressed,
-          onLongPress: computerOnline
+          onPressed: isOnline ? (){} : viewModel.powerOnComputer,
+          onLongPress: isOnline
             ? () => showDialog(
                 context: context,
                 builder: (context) => ConfirmDialog(
@@ -143,7 +138,7 @@ class _BottomBar extends StatelessWidget {
                   confirmColor: Colors.red,
                   cancelText: 'Cancelar',
                   onConfirm: () {
-                    onPowerPressed?.call();
+                    viewModel.powerOffComputer();
                   },
                 )
               )
