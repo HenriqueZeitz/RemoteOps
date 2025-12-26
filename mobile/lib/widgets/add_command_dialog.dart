@@ -3,9 +3,12 @@ import 'package:mobile/features/home/home_view_model.dart';
 import 'package:provider/provider.dart';
 
 class AddCommandDialog extends StatefulWidget {
-  final HomeViewModel viewModel;
+  final CommandCardModel? command;
 
-  const AddCommandDialog({super.key, required this.viewModel});
+  const AddCommandDialog({super.key, this.command});
+
+  bool get isEdit => command != null;
+
 
   @override
   State<AddCommandDialog> createState() => _AddCommandDialogState();
@@ -32,9 +35,22 @@ class _AddCommandDialogState extends State<AddCommandDialog> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.command != null) {
+      final cmd = widget.command!;
+      _titleController.text = cmd.title;
+      _descriptionController.text = cmd.description;
+      _startCommandController.text = cmd.startCommand;
+      _stopCommandController.text = cmd.stopCommand;
+      _selectedIcon = cmd.icon;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Novo comando'),
+      title: Text(widget.isEdit ? 'Editar comando' : 'Novo comando'),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -49,11 +65,11 @@ class _AddCommandDialogState extends State<AddCommandDialog> {
             ),
             TextField(
               controller: _startCommandController,
-              decoration: const InputDecoration(labelText: 'Comando de Início'),
+              decoration: const InputDecoration(labelText: 'Comando de início'),
             ),
             TextField(
               controller: _stopCommandController,
-              decoration: const InputDecoration(labelText: 'Comando de Parada'),
+              decoration: const InputDecoration(labelText: 'Comando de parada'),
             ),
             const SizedBox(height: 16),
             Wrap(
@@ -97,16 +113,30 @@ class _AddCommandDialogState extends State<AddCommandDialog> {
         _startCommandController.text.isEmpty ||
         _stopCommandController.text.isEmpty) return;
     
-    widget.viewModel.addCommand(
-      CommandCardModel(
-        icon: _selectedIcon,
-        title: _titleController.text,
-        description: _descriptionController.text,
-        startCommand: _startCommandController.text,
-        stopCommand: _stopCommandController.text,
-        isRunning: false,
-      ),
-    );
+    final viewModel = context.read<HomeViewModel>();
+
+    if (widget.isEdit) {
+      viewModel.updateCommand(
+        widget.command!.copyWith(
+          icon: _selectedIcon,
+          title: _titleController.text,
+          description: _descriptionController.text,
+          startCommand: _startCommandController.text,
+          stopCommand: _stopCommandController.text,
+        ),
+      );
+    } else {
+      viewModel.addCommand(
+        CommandCardModel(
+          icon: _selectedIcon,
+          title: _titleController.text,
+          description: _descriptionController.text,
+          startCommand: _startCommandController.text,
+          stopCommand: _stopCommandController.text,
+          isRunning: false,
+        ),
+      );
+    }
 
     Navigator.pop(context);
   }

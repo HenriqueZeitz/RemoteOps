@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/widgets/add_command_dialog.dart';
+import 'package:mobile/widgets/command_context_menu.dart';
+import 'package:mobile/widgets/confirm_dialog.dart';
 import 'package:provider/provider.dart';
 import 'home_view_model.dart';
 import 'home_widgets.dart';
@@ -9,10 +11,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => HomeViewModel(),
-      child: const _HomeView(),
-    );
+    return const _HomeView();
   }
 }
 
@@ -42,6 +41,37 @@ class _HomeView extends StatelessWidget {
                 onTap: () {
                   // futuramente: chamar API
                 },
+                onLongPress: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) => CommandContextMenu(
+                      onEdit: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AddCommandDialog(
+                            command: command,
+                          )
+                        );
+                      },
+                      onDelete: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => ConfirmDialog(
+                            title: 'Remover comando',
+                            message: 'Tem certeza que deseja remover este comando? Esta ação não pode ser desfeita.',
+                            confirmText: 'Remover',
+                            confirmColor: Colors.red,
+                            cancelText: 'Cancelar',
+                            onConfirm: () {
+                              viewModel.removeCommand(command.id);
+                            },
+                          )
+                        );
+                        // _showConfirmDelete(context, command, viewModel);
+                      },
+                    ),
+                  );
+                },
               );
             }
 
@@ -53,7 +83,7 @@ class _HomeView extends StatelessWidget {
                 final viewModel = context.read<HomeViewModel>();
                 showDialog(
                   context: context,
-                  builder: (_) => AddCommandDialog(viewModel: viewModel),
+                  builder: (context) => AddCommandDialog(),
                 );
               },
             );

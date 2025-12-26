@@ -38,6 +38,11 @@ sem overengineering.
 - [X] Persistência local (SharedPreferences / JSON)
 - [X] Carregar comandos ao abrir o app
 - [X] Renderizar cards dinamicamente
+- [X] Long press no card abre menu de contexto
+- [X] Opção de remover comando
+- [X] Atualizar persistência local após remoção
+- [X] Confirmar remoção com diálogo
+- [X] Editar comando existente
 - [ ] Clique no card dispara requisição HTTP
 
 ---

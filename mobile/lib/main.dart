@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/features/home/home_page.dart';
+import 'package:mobile/features/home/home_view_model.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const RemoteOpsApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => HomeViewModel(),
+      child: const RemoteOpsApp()
+    )
+  );
 }
 
 class RemoteOpsApp extends StatelessWidget {

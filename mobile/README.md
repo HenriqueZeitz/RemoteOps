@@ -69,10 +69,10 @@ Nenhum banco de dados externo é necessário nesta fase.
 🟡 **Em desenvolvimento**
 
 Funcionalidades iniciais:
-- [x] Estrutura base do projeto
-- [x] Tema e layout inicial
-- [ ] Cadastro de botões
-- [ ] Persistência local
+- [X] Estrutura base do projeto
+- [X] Tema e layout inicial
+- [X] Cadastro de botões
+- [X] Persistência local
 - [ ] Comunicação com Raspberry Pi
 - [ ] Feedback visual de status
 

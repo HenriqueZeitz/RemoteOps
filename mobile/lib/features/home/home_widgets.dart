@@ -4,11 +4,13 @@ import 'home_view_model.dart';
 class CommandCard extends StatelessWidget {
   final CommandCardModel model;
   final VoidCallback onTap;
+  final VoidCallback onLongPress;
 
   const CommandCard({
     super.key,
     required this.model,
     required this.onTap,
+    required this.onLongPress,
   });
 
   @override
@@ -18,6 +20,7 @@ class CommandCard extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
+      onLongPress: onLongPress,
       borderRadius: BorderRadius.circular(12),
       child: Container(
         padding: const EdgeInsets.all(16),
