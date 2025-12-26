@@ -21,78 +21,92 @@ class _HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<HomeViewModel>();
+    final canExecute = viewModel.computerOnline && !viewModel.isExecutingCommand;
 
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: GridView.builder(
-          itemCount: viewModel.commandCards.length + 1,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 1.2,
-          ),
-          itemBuilder: (context, index) {
-            if (index < viewModel.commandCards.length) {
-              final command = viewModel.commandCards[index];
-              return CommandCard(
-                model: command,
+        child: IgnorePointer(
+          ignoring: !canExecute,
+          child: GridView.builder(
+            itemCount: viewModel.commandCards.length + 1,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 1.2,
+            ),
+            itemBuilder: (context, index) {
+              if (index < viewModel.commandCards.length) {
+                final command = viewModel.commandCards[index];
+                return CommandCard(
+                  model: command,
+                  enabled: canExecute,
+                  onTap: canExecute
+                    ? () {
+                        viewModel.executeCommand(command);
+                      }
+                    : null,
+                  onLongPress: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => CommandContextMenu(
+                        onEdit: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => CommandFormDialog(
+                              command: command,
+                            )
+                          );
+                        },
+                        onDelete: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => ConfirmDialog(
+                              title: 'Remover comando',
+                              message: 'Tem certeza que deseja remover este comando? Esta ação não pode ser desfeita.',
+                              confirmText: 'Remover',
+                              confirmColor: Colors.red,
+                              cancelText: 'Cancelar',
+                              onConfirm: () {
+                                viewModel.removeCommand(command.id);
+                              },
+                            )
+                          );
+                        },
+                      ),
+                    );
+                  },
+                );
+              }
+
+              // último card: ícone grande centralizado
+              return AddNewCard(
+                icon: Icons.add,
+                size: 64,
                 onTap: () {
-                  // futuramente: chamar API
-                },
-                onLongPress: () {
-                  showModalBottomSheet(
+                  showDialog(
                     context: context,
-                    builder: (context) => CommandContextMenu(
-                      onEdit: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => CommandFormDialog(
-                            command: command,
-                          )
-                        );
-                      },
-                      onDelete: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => ConfirmDialog(
-                            title: 'Remover comando',
-                            message: 'Tem certeza que deseja remover este comando? Esta ação não pode ser desfeita.',
-                            confirmText: 'Remover',
-                            confirmColor: Colors.red,
-                            cancelText: 'Cancelar',
-                            onConfirm: () {
-                              viewModel.removeCommand(command.id);
-                            },
-                          )
-                        );
-                        // _showConfirmDelete(context, command, viewModel);
-                      },
-                    ),
+                    builder: (context) => CommandFormDialog(),
                   );
                 },
               );
-            }
-
-            // último card: ícone grande centralizado
-            return AddNewCard(
-              icon: Icons.add,
-              size: 64,
-              onTap: () {
-                final viewModel = context.read<HomeViewModel>();
-                showDialog(
-                  context: context,
-                  builder: (context) => CommandFormDialog(),
-                );
-              },
-            );
-          },
+            },
+          ),
         ),
       ),
-      bottomNavigationBar: _BottomBar(
-        isOnline: viewModel.computerOnline,
-        onPowerPressed: viewModel.toggleComputerStatus,
+      bottomNavigationBar: Opacity(
+        opacity: viewModel.isExecutingCommand ? 0.45 : 1.0,
+        child: IgnorePointer(
+          ignoring: viewModel.isExecutingCommand,
+          child: _BottomBar(
+            isOnline: viewModel.computerOnline,
+            onPowerPressed: viewModel.isExecutingCommand
+              ? null
+              : viewModel.toggleComputerStatus,
+            computerOnline: viewModel.computerOnline,
+          ),
+        ),
       ),
     );
   }
@@ -100,11 +114,13 @@ class _HomeView extends StatelessWidget {
 
 class _BottomBar extends StatelessWidget {
   final bool isOnline;
-  final VoidCallback onPowerPressed;
+  final VoidCallback? onPowerPressed;
+  final bool computerOnline;
 
   const _BottomBar({
     required this.isOnline,
     required this.onPowerPressed,
+    required this.computerOnline,
   });
 
   @override
@@ -116,7 +132,22 @@ class _BottomBar extends StatelessWidget {
       child: Center(
         child: IconButton(
           iconSize: 32,
-          onPressed: onPowerPressed,
+          onPressed:  computerOnline ? (){} : onPowerPressed,
+          onLongPress: computerOnline
+            ? () => showDialog(
+                context: context,
+                builder: (context) => ConfirmDialog(
+                  title: 'Desligar computador',
+                  message: 'Tem certeza que deseja desligar o computador?',
+                  confirmText: 'Desligar',
+                  confirmColor: Colors.red,
+                  cancelText: 'Cancelar',
+                  onConfirm: () {
+                    onPowerPressed?.call();
+                  },
+                )
+              )
+            : (){},
           icon: Icon(Icons.desktop_windows_outlined, color: color),
         ),
       ),

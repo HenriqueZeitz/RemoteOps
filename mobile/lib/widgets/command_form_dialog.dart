@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/features/home/home_view_model.dart';
+import 'package:mobile/features/home/models/command_card_model.dart';
 import 'package:provider/provider.dart';
 
 class CommandFormDialog extends StatefulWidget {

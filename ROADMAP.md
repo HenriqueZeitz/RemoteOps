@@ -43,7 +43,7 @@ sem overengineering.
 - [X] Atualizar persistência local após remoção
 - [X] Confirmar remoção com diálogo
 - [X] Editar comando existente
-- [ ] Clique no card dispara requisição HTTP
+- [X] Clique no card dispara requisição HTTP
 
 ---
 

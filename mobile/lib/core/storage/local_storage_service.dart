@@ -1,6 +1,6 @@
 import 'dart:convert';
+import 'package:mobile/features/home/models/command_card_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mobile/features/home/home_view_model.dart';
 
 class LocalStorageService {
   static const _commandsKey = 'commands';

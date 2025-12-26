@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/core/api/command_api.dart';
+import 'package:mobile/core/api/mock_command_api.dart';
 import 'package:mobile/core/storage/local_storage_service.dart';
-import 'package:uuid/uuid.dart';
+import 'package:mobile/features/home/models/command_card_model.dart';
 
 class HomeViewModel extends ChangeNotifier {
   final _storageService = LocalStorageService();
+  final CommandApi _commandApi = MockCommandApi();
 
   bool computerOnline = false;
+  bool isExecutingCommand = false;
   List<CommandCardModel> commandCards = [];
 
   HomeViewModel() {
@@ -35,91 +39,36 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> _loadCommands() async {
     commandCards = await _storageService.loadCommands();
-    if (commandCards.isEmpty) {
-      commandCards = _defaultCommands();
-      await _storageService.saveCommands(commandCards);
+    notifyListeners();
+  }
+
+  Future<void> executeCommand(CommandCardModel command) async {
+    if (!computerOnline || isExecutingCommand) return;
+
+    toggleExecutingState();
+
+    final response = await _commandApi.executeCommand(
+      command.isRunning ? command.stopCommand : command.startCommand
+    );
+
+    if (response.success) {
+      debugPrint('✅ ${response.message}');
+      final updatedCommand = command.copyWith(isRunning: !command.isRunning);
+      await updateCommand(updatedCommand);
+    } else {
+      debugPrint('❌ ${response.message}');
     }
+
+    toggleExecutingState();
+  }
+
+  void toggleExecutingState() {
+    isExecutingCommand = !isExecutingCommand;
     notifyListeners();
   }
 
   void toggleComputerStatus() {
     computerOnline = !computerOnline;
     notifyListeners();
-  }
-
-  List<CommandCardModel> _defaultCommands() => [
-        CommandCardModel(
-          icon: Icons.code,
-          title: 'Backend Projeto X',
-          description: 'Iniciar backend',
-          startCommand: 'start_projeto_x_backend',
-          stopCommand: 'stop_projeto_x_backend',
-        ),
-      ];
-}
-
-class CommandCardModel {
-  final String id;
-  final IconData icon;
-  final String title;
-  final String description;
-  final String startCommand;
-  final String stopCommand;
-  final bool isRunning;
-
-  CommandCardModel({
-    String? id,
-    required this.icon,
-    required this.title,
-    required this.description,
-    required this.startCommand,
-    required this.stopCommand,
-    this.isRunning = false,
-  }) : id = id ?? const Uuid().v4();
-
-  CommandCardModel copyWith({
-    IconData? icon,
-    String? title,
-    String? description,
-    String? startCommand,
-    String? stopCommand,
-    bool? isRunning,
-  }) {
-    return CommandCardModel(
-      id: id,
-      icon: icon ?? this.icon,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      startCommand: startCommand ?? this.startCommand,
-      stopCommand: stopCommand ?? this.stopCommand,
-      isRunning: isRunning ?? this.isRunning,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'icon': icon.codePoint,
-      'title': title,
-      'description': description,
-      'startCommand': startCommand,
-      'stopCommand': stopCommand,
-      'isRunning': isRunning,
-    };
-  }
-
-  factory CommandCardModel.fromMap(Map<String, dynamic> map) {
-    return CommandCardModel(
-      id: map['id'],
-      icon: IconData(
-        map['icon'],
-        fontFamily: 'MaterialIcons'
-      ),
-      title: map['title'],
-      description: map['description'],
-      startCommand: map['startCommand'],
-      stopCommand: map['stopCommand'],
-      isRunning: map['isRunning'] ?? false,
-    );
   }
 }
