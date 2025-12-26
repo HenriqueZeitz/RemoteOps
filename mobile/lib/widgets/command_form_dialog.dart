@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:mobile/features/home/home_view_model.dart';
 import 'package:provider/provider.dart';
 
-class AddCommandDialog extends StatefulWidget {
+class CommandFormDialog extends StatefulWidget {
   final CommandCardModel? command;
 
-  const AddCommandDialog({super.key, this.command});
+  const CommandFormDialog({super.key, this.command});
 
   bool get isEdit => command != null;
 
 
   @override
-  State<AddCommandDialog> createState() => _AddCommandDialogState();
+  State<CommandFormDialog> createState() => _CommandFormDialogState();
 }
 
-class _AddCommandDialogState extends State<AddCommandDialog> {
+class _CommandFormDialogState extends State<CommandFormDialog> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _startCommandController = TextEditingController();

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/widgets/add_command_dialog.dart';
+import 'package:mobile/widgets/command_form_dialog.dart';
 import 'package:mobile/widgets/command_context_menu.dart';
 import 'package:mobile/widgets/confirm_dialog.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +48,7 @@ class _HomeView extends StatelessWidget {
                       onEdit: () {
                         showDialog(
                           context: context,
-                          builder: (context) => AddCommandDialog(
+                          builder: (context) => CommandFormDialog(
                             command: command,
                           )
                         );
@@ -83,7 +83,7 @@ class _HomeView extends StatelessWidget {
                 final viewModel = context.read<HomeViewModel>();
                 showDialog(
                   context: context,
-                  builder: (context) => AddCommandDialog(),
+                  builder: (context) => CommandFormDialog(),
                 );
               },
             );
