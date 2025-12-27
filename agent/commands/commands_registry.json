@@ -1,0 +1,8 @@
+{
+    "test": {
+        "process_name": "cmdd.exe"
+    },
+    "notepad": {
+        "process_name": "notepadd.exe"
+    }
+}

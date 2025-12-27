@@ -50,12 +50,12 @@ sem overengineering.
 ## 🖥️ Fase 2 – Agent no PC
 ### Objetivo: executar comandos locais no computador
 
-- [ ] Criar projeto do agent
-- [ ] Servidor HTTP simples (ex: FastAPI ou Flask)
-- [ ] Endpoint para executar comandos
-- [ ] Pasta de comandos (.bat / scripts)
-- [ ] Executar script baseado no nome recebido
-- [ ] Retornar status de sucesso/erro
+- [X] Criar projeto do agent
+- [X] Servidor HTTP simples (ex: FastAPI ou Flask)
+- [X] Endpoint para executar comandos
+- [X] Pasta de comandos (.bat / scripts)
+- [X] Executar script baseado no nome recebido
+- [X] Retornar status de sucesso/erro
 - [ ] Rodar agent automaticamente ao iniciar o PC
 
 ---

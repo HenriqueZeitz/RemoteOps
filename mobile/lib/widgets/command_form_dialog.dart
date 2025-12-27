@@ -112,7 +112,9 @@ class _CommandFormDialogState extends State<CommandFormDialog> {
   void _save() {
     if (_titleController.text.isEmpty ||
         _startCommandController.text.isEmpty ||
-        _stopCommandController.text.isEmpty) return;
+        _stopCommandController.text.isEmpty) {
+          return;
+        }
     
     final viewModel = context.read<HomeViewModel>();
 

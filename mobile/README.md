@@ -74,7 +74,7 @@ Funcionalidades iniciais:
 - [X] Cadastro de botões
 - [X] Persistência local
 - [ ] Comunicação com Raspberry Pi
-- [ ] Feedback visual de status
+- [X] Feedback visual de status
 
 O roadmap completo está disponível no arquivo [`ROADMAP.md`](../ROADMAP.md).
 
