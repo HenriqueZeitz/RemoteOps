@@ -56,7 +56,7 @@ sem overengineering.
 - [X] Pasta de comandos (.bat / scripts)
 - [X] Executar script baseado no nome recebido
 - [X] Retornar status de sucesso/erro
-- [ ] Rodar agent automaticamente ao iniciar o PC
+- [X] Rodar agent automaticamente ao iniciar o PC
 
 ---
 
@@ -80,15 +80,16 @@ sem overengineering.
 - [ ] Testar acesso via VPN no celular (app externo)
 - [ ] Garantir que API só funcione via VPN
 - [ ] Documentar configuração da VPN
+- [ ] Criar um rate limit de requisições por IP
 
 ---
 
 ## ⚡ Fase 5 – Funcionalidades Essenciais
 ### Objetivo: tornar o sistema realmente útil
 
-- [ ] Ligar computador via Wake-on-LAN
-- [ ] Executar comando para iniciar backend local
-- [ ] Executar comando para iniciar servidor (ex: Minecraft)
+- [X] Ligar computador via Wake-on-LAN
+- [X] Executar comando para iniciar backend local
+- [X] Executar comando para iniciar servidor (ex: Minecraft)
 - [ ] Retorno visual simples (sucesso / erro)
 
 ---
@@ -96,11 +97,11 @@ sem overengineering.
 ## 🎨 Fase 6 – UX e Qualidade
 ### Objetivo: melhorar experiência de uso
 
-- [ ] Indicador visual de status no card
-- [ ] Botão Power fixo no rodapé
+- [X] Indicador visual de status no card
+- [X] Botão Power fixo no rodapé
 - [ ] Feedback visual ao executar comandos
 - [ ] Tratamento de erros de conexão
-- [ ] Loading states
+- [X] Loading states
 
 ---
 

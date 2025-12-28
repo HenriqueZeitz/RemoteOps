@@ -75,9 +75,6 @@ def power_off_handler():
         return {
             "status": "blocked",
             "message": "services are still running",
-            "data": {
-                "running_services": services.list_running_services(),
-            },
         }
 
     try:
@@ -95,7 +92,7 @@ def power_off_handler():
         },
     }
 
-def computer_status_handler():
+def health_check_handler():
     return {
-        "status": "online",
+        "status": "ok",
     }

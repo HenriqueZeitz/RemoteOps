@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
 from src.api.auth import verify_api_key
-from src.handlers.commands_handler import commands_status_handler, computer_status_handler, execute_command_handler, power_off_handler
+from src.handlers.commands_handler import commands_status_handler, execute_command_handler, health_check_handler, power_off_handler
 from src.models.command_request import CommandRequest
 from src.models.status_request import StatusRequest
 
@@ -19,6 +19,6 @@ def execute_command(req: CommandRequest):
 def power_off():
     return power_off_handler()
 
-@router.get("/computer/status", dependencies=[Depends(verify_api_key)])
-def computer_status():
-    return computer_status_handler()
+@router.get("/health", dependencies=[Depends(verify_api_key)])
+def health_check():
+    return health_check_handler()
