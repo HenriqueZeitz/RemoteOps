@@ -29,6 +29,7 @@ Ele aceita apenas comandos previamente registrados em um arquivo de configuraç�
 ```
 agent/
 ├── main.py
+├── .env
 ├── requirements.txt
 ├── commands/
 ├── config.py
@@ -66,6 +67,18 @@ venv\Scripts\activate     # Windows
 ```
 pip install -r requirements.txt
 ```
+
+---
+
+### 3️⃣ Criar arquivo .env
+
+```env
+API_KEY=chave_secreta
+```
+
+| Variável | Descrição |
+| --- | --- |
+| `API_KEY` | Token para acessar o agent |
 
 ---
 
