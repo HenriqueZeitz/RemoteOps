@@ -1,5 +1,11 @@
 {
     "test": {
         "process_name": "cmd.exe"
+    },
+    "notepad": {
+        "process_name": "notepad.exe"
+    },
+    "start_mine_server": {
+        "process_name": "java.exe"
     }
 }

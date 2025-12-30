@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile/features/home/home_page.dart';
 import 'package:mobile/features/home/home_view_model.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
+  await dotenv.load(fileName: ".env");
   runApp(
     ChangeNotifierProvider(
       create: (_) => HomeViewModel(),

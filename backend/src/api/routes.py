@@ -16,6 +16,10 @@ def health():
 def computer_health():
     return check_agent_health()
 
+@router.post("/computer/power/on", dependencies=[Depends(verify_bearer_token)])
+def power_on_computer():
+    return agent_power_on_computer()
+
 @router.post("/commands/execute", dependencies=[Depends(verify_bearer_token)])
 def execute(req: CommandRequest):
     return agent_execute(req)

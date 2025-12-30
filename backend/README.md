@@ -46,6 +46,9 @@ backend/
 │   │   ├── routes.py        # Rotas públicas do backend
 │   │   └── auth.py          # Autenticação Bearer Token
 │   │
+│   ├── domain/
+│   │   └── computer.py      # Domínio
+│   │
 │   ├── clients/
 │   │   └── agent_client.py  # Cliente HTTP para comunicação com o Agent
 │   │

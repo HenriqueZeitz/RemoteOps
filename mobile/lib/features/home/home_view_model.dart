@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/core/api/command_api.dart';
+import 'package:mobile/core/api/http_command_api.dart';
 import 'package:mobile/core/api/mock_command_api.dart';
 import 'package:mobile/core/storage/local_storage_service.dart';
 import 'package:mobile/features/home/models/command_card_model.dart';
 
+const bool USE_MOCK_API = false;
+
 class HomeViewModel extends ChangeNotifier {
   final _storageService = LocalStorageService();
-  final CommandApi _commandApi = MockCommandApi();
+  late final CommandApi _commandApi;
 
   bool computerOnline = false;
   bool isExecutingCommand = false;
   List<CommandCardModel> commandCards = [];
 
   HomeViewModel() {
+    _commandApi = USE_MOCK_API ? MockCommandApi() : HttpCommandApi();
+
     _loadCommands();
   }
 
@@ -67,7 +72,8 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void powerOnComputer() {
+  void powerOnComputer() async {
+    await _commandApi.powerOnComputer();
     computerOnline = !computerOnline;
     notifyListeners();
   }
