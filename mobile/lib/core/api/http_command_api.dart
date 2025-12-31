@@ -2,25 +2,28 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/core/api/api_response.dart';
 import 'package:mobile/core/api/command_api.dart';
 
 class HttpCommandApi implements CommandApi {
-  static final _backendIp = kDebugMode ? "10.0.2.2" : dotenv.env['BACKEND_IP'];
-  static final _token = dotenv.env['BACKEND_API_KEY'];
-  static final String _baseUrl = 'http://$_backendIp:8000';
+  final String baseUrl;
+  final String token;
+  // static final _backendIp = kDebugMode ? "10.0.2.2" : dotenv.env['BACKEND_IP'];
+  // static final _token = dotenv.env['BACKEND_API_KEY'];
+  // static final String _baseUrl = 'http://$_backendIp:8000';
+
+  HttpCommandApi({required this.baseUrl, required this.token});
 
   @override
   Future<ApiResponse> executeCommand(String command, bool startCommand) async {
     try {
-      final uri = Uri.parse('$_baseUrl/commands/execute');
+      final uri = Uri.parse('$baseUrl/commands/execute');
 
       final response = await http.post(
         uri,
         headers: {
-          'Authorization': 'Bearer $_token',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
@@ -53,12 +56,12 @@ class HttpCommandApi implements CommandApi {
   @override
   Future<ApiResponse> powerOnComputer() async {
     try {
-      final uri = Uri.parse('$_baseUrl/computer/power/on');
+      final uri = Uri.parse('$baseUrl/computer/power/on');
 
       final response = await http.post(
         uri,
         headers: {
-          'Authorization': 'Bearer $_token',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         }
       );
@@ -87,11 +90,11 @@ class HttpCommandApi implements CommandApi {
   @override
   Future<bool> checkAgentHealth() async {
     try {
-      final uri = Uri.parse('$_baseUrl/agent/health');
+      final uri = Uri.parse('$baseUrl/agent/health');
       final response = await http.get(
         uri,
         headers: {
-          'Authorization': 'Bearer $_token',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         }
       );
@@ -109,11 +112,11 @@ class HttpCommandApi implements CommandApi {
   @override
   Future<Map<String, String>> getCommandsStatus(List<String> commands) async {
     try {
-      final uri = Uri.parse('$_baseUrl/commands/status');
+      final uri = Uri.parse('$baseUrl/commands/status');
       final response = await http.post(
         uri,
         headers: {
-          'Authorization': 'Bearer $_token',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
         body: jsonEncode({'commands': commands})

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/widgets/command_form_dialog.dart';
 import 'package:mobile/widgets/command_context_menu.dart';
+import 'package:mobile/widgets/config_settings_dialog.dart';
 import 'package:mobile/widgets/confirm_dialog.dart';
 import 'package:provider/provider.dart';
 import 'home_view_model.dart';
@@ -22,6 +23,24 @@ class _HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = context.watch<HomeViewModel>();
     final canExecute = viewModel.computerOnline && !viewModel.isExecutingCommand;
+
+    if (!viewModel.isConfigured) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.settings_input_component_outlined, size: 64),
+              const Text("Bem vindo! Configure seu servidor para começar."),
+              ElevatedButton(
+                onPressed: () => ConfigSettingsDialog(viewModel: viewModel,),
+                child: const Text("Configurar agora"),
+              )
+            ],
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       body: RefreshIndicator(
@@ -127,27 +146,45 @@ class _BottomBar extends StatelessWidget {
 
     return BottomAppBar(
       height: 64,
-      child: Center(
-        child: IconButton(
-          iconSize: 32,
-          onPressed: isOnline ? (){} : viewModel.powerOnComputer,
-          onLongPress: isOnline
-            ? () => showDialog(
-                context: context,
-                builder: (context) => ConfirmDialog(
-                  title: 'Desligar computador',
-                  message: 'Tem certeza que deseja desligar o computador?',
-                  confirmText: 'Desligar',
-                  confirmColor: Colors.red,
-                  cancelText: 'Cancelar',
-                  onConfirm: () {
-                    viewModel.powerOffComputer();
-                  },
-                )
-              )
-            : (){},
-          icon: Icon(Icons.desktop_windows_outlined, color: color),
-        ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.settings_outlined),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => ConfigSettingsDialog(viewModel: viewModel),
+                );
+              },
+            ),
+            Spacer(),
+            IconButton(
+              iconSize: 32,
+              onPressed: isOnline ? (){} : viewModel.powerOnComputer,
+              onLongPress: isOnline
+                ? () => showDialog(
+                    context: context,
+                    builder: (context) => ConfirmDialog(
+                      title: 'Desligar computador',
+                      message: 'Tem certeza que deseja desligar o computador?',
+                      confirmText: 'Desligar',
+                      confirmColor: Colors.red,
+                      cancelText: 'Cancelar',
+                      onConfirm: () {
+                        viewModel.powerOffComputer();
+                      },
+                    )
+                  )
+                : (){},
+              icon: Icon(Icons.desktop_windows_outlined, color: color),
+            ),
+            Spacer(),
+            Opacity(opacity: 0, child: IconButton(icon: Icon(Icons.settings), onPressed: null,))
+          ],
+        )
       ),
     );
   }

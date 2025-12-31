@@ -22,4 +22,18 @@ class LocalStorageService {
     final List decoded = jsonDecode(jsonString);
     return decoded.map((e) => CommandCardModel.fromMap(e)).toList();
   }
+
+  Future<void> saveSettings(String ip, String apiKey) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('backend_ip', ip);
+    await prefs.setString('backend_token', apiKey);
+  }
+
+  Future<Map<String, String?>> loadSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    return {
+      'ip': prefs.getString('backend_ip'),
+      'token': prefs.getString('backend_token'),
+    };
+  }
 }

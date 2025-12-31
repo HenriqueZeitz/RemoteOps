@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/core/api/command_api.dart';
 import 'package:mobile/core/api/http_command_api.dart';
@@ -8,6 +9,7 @@ import 'package:mobile/features/home/models/command_card_model.dart';
 const bool USE_MOCK_API = false;
 
 class HomeViewModel extends ChangeNotifier {
+  bool isConfigured = false;
   final _storageService = LocalStorageService();
   late final CommandApi _commandApi;
 
@@ -16,13 +18,32 @@ class HomeViewModel extends ChangeNotifier {
   List<CommandCardModel> commandCards = [];
 
   HomeViewModel() {
-    _commandApi = USE_MOCK_API ? MockCommandApi() : HttpCommandApi();
     _initialize();
   }
 
   Future<void> _initialize() async {
-    await _loadCommands();
-    await checkAllStatuses();
+    final settings = await _storageService.loadSettings();
+
+    if (settings['ip'] != null && settings['token'] != null) {
+      final defaultIp = kDebugMode ? "10.0.2.2" : settings['ip'];
+      _commandApi = USE_MOCK_API 
+        ? MockCommandApi()
+        : HttpCommandApi(
+          baseUrl: "http://${defaultIp}:8000",
+          token: settings['token']!,
+        );
+      isConfigured = true;
+      await _loadCommands();
+      await checkAllStatuses();
+    } else {
+      isConfigured = false;
+    }
+    notifyListeners();
+  }
+
+  Future<void> updateSettings(String ip, String token) async {
+    await _storageService.saveSettings(ip, token);
+    await _initialize();
   }
 
   Future<void> checkAllStatuses() async {

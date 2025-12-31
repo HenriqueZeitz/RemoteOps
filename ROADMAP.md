@@ -90,7 +90,7 @@ sem overengineering.
 - [X] Ligar computador via Wake-on-LAN
 - [X] Executar comando para iniciar backend local
 - [X] Executar comando para iniciar servidor (ex: Minecraft)
-- [ ] Retorno visual simples (sucesso / erro)
+- [X] Retorno visual simples (sucesso / erro)
 
 ---
 
@@ -99,7 +99,7 @@ sem overengineering.
 
 - [X] Indicador visual de status no card
 - [X] Botão Power fixo no rodapé
-- [ ] Feedback visual ao executar comandos
+- [X] Feedback visual ao executar comandos
 - [ ] Tratamento de erros de conexão
 - [X] Loading states
 
