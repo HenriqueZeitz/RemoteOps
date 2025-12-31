@@ -18,8 +18,7 @@ class CommandFormDialog extends StatefulWidget {
 class _CommandFormDialogState extends State<CommandFormDialog> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
-  final _startCommandController = TextEditingController();
-  final _stopCommandController = TextEditingController();
+  final _serviceController = TextEditingController();
 
   IconData _selectedIcon = Icons.smart_toy_outlined;
 
@@ -42,8 +41,7 @@ class _CommandFormDialogState extends State<CommandFormDialog> {
       final cmd = widget.command!;
       _titleController.text = cmd.title;
       _descriptionController.text = cmd.description;
-      _startCommandController.text = cmd.startCommand;
-      _stopCommandController.text = cmd.stopCommand;
+      _serviceController.text = cmd.service;
       _selectedIcon = cmd.icon;
     }
   }
@@ -65,12 +63,8 @@ class _CommandFormDialogState extends State<CommandFormDialog> {
               decoration: const InputDecoration(labelText: 'Descrição'),
             ),
             TextField(
-              controller: _startCommandController,
-              decoration: const InputDecoration(labelText: 'Comando de início'),
-            ),
-            TextField(
-              controller: _stopCommandController,
-              decoration: const InputDecoration(labelText: 'Comando de parada'),
+              controller: _serviceController,
+              decoration: const InputDecoration(labelText: 'Serviço'),
             ),
             const SizedBox(height: 16),
             Wrap(
@@ -111,8 +105,7 @@ class _CommandFormDialogState extends State<CommandFormDialog> {
 
   void _save() {
     if (_titleController.text.isEmpty ||
-        _startCommandController.text.isEmpty ||
-        _stopCommandController.text.isEmpty) {
+        _serviceController.text.isEmpty) {
           return;
         }
     
@@ -124,8 +117,7 @@ class _CommandFormDialogState extends State<CommandFormDialog> {
           icon: _selectedIcon,
           title: _titleController.text,
           description: _descriptionController.text,
-          startCommand: _startCommandController.text,
-          stopCommand: _stopCommandController.text,
+          service: _serviceController.text,
         ),
       );
     } else {
@@ -134,8 +126,7 @@ class _CommandFormDialogState extends State<CommandFormDialog> {
           icon: _selectedIcon,
           title: _titleController.text,
           description: _descriptionController.text,
-          startCommand: _startCommandController.text,
-          stopCommand: _stopCommandController.text,
+          service: _serviceController.text,
           isRunning: false,
         ),
       );

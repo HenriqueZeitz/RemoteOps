@@ -17,8 +17,32 @@ class HomeViewModel extends ChangeNotifier {
 
   HomeViewModel() {
     _commandApi = USE_MOCK_API ? MockCommandApi() : HttpCommandApi();
+    _initialize();
+  }
 
-    _loadCommands();
+  Future<void> _initialize() async {
+    await _loadCommands();
+    await checkAllStatuses();
+  }
+
+  Future<void> checkAllStatuses() async {
+    computerOnline = await _commandApi.checkAgentHealth();
+    notifyListeners();
+
+    if (computerOnline && commandCards.isNotEmpty) {
+      final serviceNames = commandCards.map((c) => c.service).toList();
+      final statuses = await _commandApi.getCommandsStatus(serviceNames);
+
+      if (statuses.isNotEmpty) {
+        commandCards = commandCards.map((card) {
+          final status = statuses[card.service];
+          return card.copyWith(isRunning: status == 'running');
+        }).toList();
+
+        await _storageService.saveCommands(commandCards);
+        notifyListeners();
+      }
+    }
   }
 
   Future<void> addCommand(CommandCardModel command) async {
@@ -52,17 +76,20 @@ class HomeViewModel extends ChangeNotifier {
 
     toggleExecutingState();
 
-    final response = await _commandApi.executeCommand(
-      command.isRunning ? command.stopCommand : command.startCommand
-    );
-
-    if (response.success) {
-      debugPrint('✅ ${response.message}');
-      final updatedCommand = command.copyWith(isRunning: !command.isRunning);
-      await updateCommand(updatedCommand);
-    } else {
-      debugPrint('❌ ${response.message}');
-    }
+    await _commandApi
+      .executeCommand(
+        command.service,
+        !command.isRunning
+      )
+      .then((response) async {
+        if (response.success) {
+          debugPrint('✅ ${response.message}');
+          final updatedCommand = command.copyWith(isRunning: !command.isRunning);
+          await updateCommand(updatedCommand);
+        } else {
+          debugPrint('❌ ${response.message}');
+        }
+      });
 
     toggleExecutingState();
   }
@@ -73,9 +100,12 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   void powerOnComputer() async {
-    await _commandApi.powerOnComputer();
-    computerOnline = !computerOnline;
-    notifyListeners();
+    final response = await _commandApi.powerOnComputer();
+    if (response.success) {
+      computerOnline = true;
+      notifyListeners();
+      Future.delayed(const Duration(seconds: 5), () => checkAllStatuses());
+    }
   }
 
   void powerOffComputer() {

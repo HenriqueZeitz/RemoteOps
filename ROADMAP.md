@@ -63,13 +63,13 @@ sem overengineering.
 ## 🍓 Fase 3 – Raspberry Pi (Middleware)
 ### Objetivo: ponto central de controle e segurança
 
-- [ ] Instalar Raspberry Pi OS Lite
-- [ ] Configuração headless (SSH)
-- [ ] Criar backend FastAPI
-- [ ] Endpoint para Wake-on-LAN
-- [ ] Endpoint para repassar comandos ao agent do PC
-- [ ] Validação básica das requisições
-- [ ] Retornar resposta para o app mobile
+- [X] Instalar Raspberry Pi OS Lite
+- [X] Configuração headless (SSH)
+- [X] Criar backend FastAPI
+- [X] Endpoint para Wake-on-LAN
+- [X] Endpoint para repassar comandos ao agent do PC
+- [X] Validação básica das requisições
+- [X] Retornar resposta para o app mobile
 
 ---
 

@@ -6,8 +6,7 @@ class CommandCardModel {
   final IconData icon;
   final String title;
   final String description;
-  final String startCommand;
-  final String stopCommand;
+  final String service;
   final bool isRunning;
 
   CommandCardModel({
@@ -15,8 +14,7 @@ class CommandCardModel {
     required this.icon,
     required this.title,
     required this.description,
-    required this.startCommand,
-    required this.stopCommand,
+    required this.service,
     this.isRunning = false,
   }) : id = id ?? const Uuid().v4();
 
@@ -24,8 +22,7 @@ class CommandCardModel {
     IconData? icon,
     String? title,
     String? description,
-    String? startCommand,
-    String? stopCommand,
+    String? service,
     bool? isRunning,
   }) {
     return CommandCardModel(
@@ -33,8 +30,7 @@ class CommandCardModel {
       icon: icon ?? this.icon,
       title: title ?? this.title,
       description: description ?? this.description,
-      startCommand: startCommand ?? this.startCommand,
-      stopCommand: stopCommand ?? this.stopCommand,
+      service: service ?? this.service,
       isRunning: isRunning ?? this.isRunning,
     );
   }
@@ -45,8 +41,7 @@ class CommandCardModel {
       'icon': icon.codePoint,
       'title': title,
       'description': description,
-      'startCommand': startCommand,
-      'stopCommand': stopCommand,
+      'service': service,
       'isRunning': isRunning,
     };
   }
@@ -60,8 +55,7 @@ class CommandCardModel {
       ),
       title: map['title'],
       description: map['description'],
-      startCommand: map['startCommand'],
-      stopCommand: map['stopCommand'],
+      service: map['service'],
       isRunning: map['isRunning'] ?? false,
     );
   }

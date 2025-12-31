@@ -1,11 +1,17 @@
 {
     "test": {
-        "process_name": "cmd.exe"
+        "process_name": "cmd.exe",
+        "dir": "",
+        "start": "cmd"
     },
     "notepad": {
-        "process_name": "notepad.exe"
+        "process_name": "notepad.exe",
+        "dir": "",
+        "start": "notepad"
     },
-    "start_mine_server": {
-        "process_name": "java.exe"
+    "minecraft_server": {
+        "process_name": "java.exe",
+        "dir": "C:\\Users\\henri\\Desktop\\ModdedServer",
+        "start": "start_mine_server"
     }
 }

@@ -7,7 +7,7 @@ class MockCommandApi implements CommandApi {
   final _random = Random();
 
   @override
-  Future<ApiResponse> executeCommand(String command) async {
+  Future<ApiResponse> executeCommand(String command, bool startCommand) async {
     await Future.delayed(const Duration(seconds: 1));
 
     final hasError = _random.nextInt(10) < 3;
@@ -43,4 +43,13 @@ class MockCommandApi implements CommandApi {
       );
     }
   }
-}
+
+  @override
+  Future<bool> checkAgentHealth() async {
+    return _random.nextBool();
+  }
+
+  @override
+  Future<Map<String, String>> getCommandsStatus(List<String> commands) {
+    throw UnimplementedError();
+  }}
