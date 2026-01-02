@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from src.domain.computer import computer_wol
 from src.models.status_request import StatusRequest
 from src.api.auth import verify_bearer_token
-from src.clients.agent_client import agent_execute, check_agent_health, check_commands_status
+from src.clients.agent_client import agent_execute, check_agent_health, check_commands_status, computer_shutdown
 from src.models.command_request import CommandRequest
 
 
@@ -20,6 +20,10 @@ def computer_health():
 @router.post("/computer/power/on", dependencies=[Depends(verify_bearer_token)])
 def power_on_computer():
     return computer_wol()
+
+@router.post("/computer/power/off", dependencies=[Depends(verify_bearer_token)])
+def power_off_computer():
+    return computer_shutdown()
 
 @router.post("/commands/execute", dependencies=[Depends(verify_bearer_token)])
 def execute(req: CommandRequest):

@@ -13,23 +13,3 @@ def is_command_running(command) -> bool:
         return False
     
     return is_process_running(process_name)
-
-def any_service_running() -> bool:
-    registry = load_commands_registry()
-
-    for command, command_def in registry.items():
-        process_name = command_def.get("process_name")
-        if process_name and is_process_running(process_name):
-            return True
-    return False
-
-def list_running_services() -> list[str]:
-    registry = load_commands_registry()
-    running_services = []
-
-    for command, command_def in registry.items():
-        process_name = command_def.get("process_name")
-        if process_name and is_process_running(process_name):
-            running_services.append(command)
-    
-    return running_services

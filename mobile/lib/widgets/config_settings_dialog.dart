@@ -1,4 +1,3 @@
-// lib/widgets/config_settings_dialog.dart
 import 'package:flutter/material.dart';
 import 'package:mobile/core/storage/local_storage_service.dart';
 import 'package:mobile/features/home/home_view_model.dart';
@@ -25,7 +24,6 @@ class _ConfigSettingsDialogState extends State<ConfigSettingsDialog> {
   }
 
   Future<void> _loadCurrentSettings() async {
-    // Busca os dados salvos no SharedPreferences
     final settings = await _storage.loadSettings();
     
     if (mounted) {
@@ -67,10 +65,10 @@ class _ConfigSettingsDialogState extends State<ConfigSettingsDialog> {
                 autofocus: true,
                 decoration: const InputDecoration(
                   labelText: 'IP do Backend',
-                  hintText: 'Ex: 192.168.1.15',
+                  hintText: 'Ex: 192.168.0.1',
                   prefixIcon: Icon(Icons.lan),
                 ),
-                keyboardType: TextInputType.values[3], // Sugere teclado numérico
+                keyboardType: TextInputType.values[3],
               ),
               const SizedBox(height: 16),
               TextField(
@@ -90,13 +88,15 @@ class _ConfigSettingsDialogState extends State<ConfigSettingsDialog> {
           child: const Text('CANCELAR'),
         ),
         ElevatedButton(
-          onPressed: _isLoading ? null : () async {
-            // Salva e reinicializa a API na ViewModel
-            await widget.viewModel.updateSettings(
-              _ipController.text.trim(),
-              _tokenController.text.trim(),
+          onPressed: _isLoading ? null : () {
+            final ip = _ipController.text.trim();
+            final token = _tokenController.text.trim();
+            Navigator.pop(context);
+
+            widget.viewModel.updateSettings(
+              ip,
+              token,
             );
-            if (context.mounted) Navigator.pop(context);
           },
           child: const Text('SALVAR'),
         ),

@@ -95,12 +95,6 @@ def commands_status_handler(req: StatusRequest):
     }
 
 def power_off_handler():
-    if services.any_service_running():
-        return {
-            "status": "blocked",
-            "message": "commands are still running",
-        }
-
     try:
         if platform.system().lower() == "windows":
             subprocess.Popen(["shutdown", "/s", "/f", "/t", str(int(SHUTDOWN_DELAY))])

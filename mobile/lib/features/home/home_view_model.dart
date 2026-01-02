@@ -9,10 +9,10 @@ import 'package:mobile/features/home/models/command_card_model.dart';
 const bool USE_MOCK_API = false;
 
 class HomeViewModel extends ChangeNotifier {
-  bool isConfigured = false;
   final _storageService = LocalStorageService();
-  late final CommandApi _commandApi;
+  CommandApi? _commandApi;
 
+  bool isConfigured = false;
   bool computerOnline = false;
   bool isExecutingCommand = false;
   List<CommandCardModel> commandCards = [];
@@ -33,12 +33,18 @@ class HomeViewModel extends ChangeNotifier {
           token: settings['token']!,
         );
       isConfigured = true;
+      notifyListeners();
+
       await _loadCommands();
-      await checkAllStatuses();
+      try {
+        await checkAllStatuses();
+      } catch (e) {
+        debugPrint("Erro ao checar status inicial: $e");
+      }
     } else {
       isConfigured = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   Future<void> updateSettings(String ip, String token) async {
@@ -47,12 +53,12 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future<void> checkAllStatuses() async {
-    computerOnline = await _commandApi.checkAgentHealth();
+    computerOnline = await _commandApi!.checkAgentHealth();
     notifyListeners();
 
     if (computerOnline && commandCards.isNotEmpty) {
       final serviceNames = commandCards.map((c) => c.service).toList();
-      final statuses = await _commandApi.getCommandsStatus(serviceNames);
+      final statuses = await _commandApi!.getCommandsStatus(serviceNames);
 
       if (statuses.isNotEmpty) {
         commandCards = commandCards.map((card) {
@@ -97,7 +103,7 @@ class HomeViewModel extends ChangeNotifier {
 
     toggleExecutingState();
 
-    await _commandApi
+    await _commandApi!
       .executeCommand(
         command.service,
         !command.isRunning
@@ -121,7 +127,7 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   void powerOnComputer() async {
-    final response = await _commandApi.powerOnComputer();
+    final response = await _commandApi!.powerOnComputer();
     if (response.success) {
       computerOnline = true;
       notifyListeners();

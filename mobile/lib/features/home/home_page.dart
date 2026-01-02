@@ -33,7 +33,12 @@ class _HomeView extends StatelessWidget {
               const Icon(Icons.settings_input_component_outlined, size: 64),
               const Text("Bem vindo! Configure seu servidor para começar."),
               ElevatedButton(
-                onPressed: () => ConfigSettingsDialog(viewModel: viewModel,),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => ConfigSettingsDialog(viewModel: viewModel)
+                  );
+                },
                 child: const Text("Configurar agora"),
               )
             ],

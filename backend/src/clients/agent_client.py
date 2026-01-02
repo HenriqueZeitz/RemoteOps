@@ -29,3 +29,12 @@ def check_commands_status(req):
     )
     resp.raise_for_status()
     return resp.json()
+
+def computer_shutdown():
+    resp = requests.post(
+        f"{AGENT_BASE_URL}/computer/power/off",
+        headers=HEADERS,
+        timeout=5,
+    )
+    resp.raise_for_status()
+    return resp.json()
