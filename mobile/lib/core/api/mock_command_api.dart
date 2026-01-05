@@ -45,6 +45,25 @@ class MockCommandApi implements CommandApi {
   }
 
   @override
+  Future<ApiResponse> powerOffComputer() async {
+        await Future.delayed(const Duration(seconds: 1));
+
+    final hasError = _random.nextInt(10) < 3;
+
+    if (hasError) {
+      return ApiResponse(
+        success: false,
+        message: 'Falha ao desligar o computador',
+      );
+    } else {
+      return ApiResponse(
+        success: true,
+        message: 'Computador desligado com sucesso',
+      );
+    }
+  }
+
+  @override
   Future<bool> checkAgentHealth() async {
     return _random.nextBool();
   }

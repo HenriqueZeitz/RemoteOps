@@ -127,19 +127,26 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   void powerOnComputer() async {
-    final response = await _commandApi!.powerOnComputer();
-    if (response.success) {
-      computerOnline = true;
-      notifyListeners();
-      Future.delayed(const Duration(seconds: 5), () => checkAllStatuses());
-    }
+    await _commandApi!.powerOnComputer()
+      .then((response) {
+        if (response.success) {
+          computerOnline = true;
+          notifyListeners();
+          Future.delayed(const Duration(seconds: 5), () => checkAllStatuses());
+        }
+      });
   }
 
-  void powerOffComputer() {
-    computerOnline = false;
-    commandCards = commandCards
-      .map((c) => c.copyWith(isRunning: false))
-      .toList();
-    notifyListeners();
+  void powerOffComputer() async {
+    await _commandApi!.powerOffComputer()
+      .then((response) {
+        if (response.success) {
+          computerOnline = false;
+          commandCards = commandCards
+            .map((c) => c.copyWith(isRunning: false))
+            .toList();
+          notifyListeners();
+        }
+      });
   }
 }
