@@ -212,8 +212,7 @@ Body:
 - [ ] Rate limit por IP
 - [ ] Logs estruturados
 - [ ] Dockerização
-- [ ] Deploy no Raspberry Pi
-- [ ] Dashboard Web
+- [X] Deploy no Raspberry Pi
 
 ## 🧠 Observações
 

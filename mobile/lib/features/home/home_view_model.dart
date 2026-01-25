@@ -27,6 +27,7 @@ class HomeViewModel extends ChangeNotifier {
 
     if (settings['ip'] != null && settings['token'] != null) {
       final defaultIp = kDebugMode ? "10.0.2.2" : settings['ip'];
+      // final defaultIp = settings['ip'];
       _commandApi = USE_MOCK_API 
         ? MockCommandApi()
         : HttpCommandApi(
@@ -55,7 +56,6 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> checkAllStatuses() async {
     computerOnline = await _commandApi!.checkComputerOnline();
-    print('Computer online: $computerOnline');
     agentOnline = await _commandApi!.checkAgentHealth();
     notifyListeners();
 
@@ -113,11 +113,8 @@ class HomeViewModel extends ChangeNotifier {
       )
       .then((response) async {
         if (response.success) {
-          debugPrint('✅ ${response.message}');
           final updatedCommand = command.copyWith(isRunning: !command.isRunning);
           await updateCommand(updatedCommand);
-        } else {
-          debugPrint('❌ ${response.message}');
         }
       });
 
@@ -130,9 +127,7 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   void powerOnComputer() async {
-    print('oi');
     computerOnline = await _commandApi!.checkComputerOnline();
-    print('Computer online: $computerOnline');
     await _commandApi!.powerOnComputer()
       .then((response) {
         if (response.success) {

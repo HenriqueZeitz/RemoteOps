@@ -28,7 +28,7 @@ def computer_wol():
             "message": f"Failed to send packet: {str(e)}"
         }
 
-def is_computer_online() -> bool:
+def is_computer_online():
     if not AGENT_IP:
         return False
     return ping_host(AGENT_IP)

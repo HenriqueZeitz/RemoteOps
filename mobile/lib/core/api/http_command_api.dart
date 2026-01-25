@@ -119,28 +119,6 @@ class HttpCommandApi implements CommandApi {
   }
 
   @override
-  Future<bool> checkAgentHealth() async {
-    try {
-      final uri = Uri.parse('$baseUrl/agent/health');
-      final response = await http.get(
-        uri,
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        }
-      );
-
-      if (response.statusCode == 200) {
-        final data =jsonDecode(response.body);
-        return data['status'] == 'ok';
-      }
-      return false;
-    } catch (_) {
-      return false;
-    }
-  }
-
-  @override
   Future<Map<String, String>> getCommandsStatus(List<String> commands) async {
     try {
       final uri = Uri.parse('$baseUrl/commands/status');
@@ -154,7 +132,7 @@ class HttpCommandApi implements CommandApi {
       );
 
       if (response.statusCode == 200) {
-        final json =jsonDecode(response.body);
+        final json = jsonDecode(response.body);
         if (json['status'] == 'success') {
           return Map<String, String>.from(json['data']);
         }
@@ -163,6 +141,28 @@ class HttpCommandApi implements CommandApi {
     } catch (e) {
       debugPrint('Erro ao buscar status: $e');
       return {};
+    }
+  }
+
+  @override
+  Future<bool> checkAgentHealth() async {
+    try {
+      final uri = Uri.parse('$baseUrl/agent/health');
+      final response = await http.get(
+        uri,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        }
+      );
+
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body);
+        return json['status'] == 'ok';
+      }
+      return false;
+    } catch (_) {
+      return false;
     }
   }
 
@@ -179,11 +179,11 @@ class HttpCommandApi implements CommandApi {
       );
 
       if (response.statusCode == 200) {
-        final data =jsonDecode(response.body);
-        return data['status'] == 'online';
+        final json = jsonDecode(response.body);
+        return json['status'] == 'online';
       }
       return false;
-    } catch (_) {
+    } catch (e) {
       return false;
     }
   }
