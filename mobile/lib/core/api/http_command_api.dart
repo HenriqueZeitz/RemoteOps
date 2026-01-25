@@ -165,4 +165,26 @@ class HttpCommandApi implements CommandApi {
       return {};
     }
   }
+
+  @override
+  Future<bool> checkComputerOnline() async {
+    try {
+      final uri = Uri.parse('$baseUrl/computer/online');
+      final response = await http.get(
+        uri,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        }
+      );
+
+      if (response.statusCode == 200) {
+        final data =jsonDecode(response.body);
+        return data['status'] == 'online';
+      }
+      return false;
+    } catch (_) {
+      return false;
+    }
+  }
 }

@@ -1,7 +1,8 @@
 import re
 import socket
 
-from src.config import AGENT_MAC
+from src.config import AGENT_MAC, AGENT_IP
+from src.infra.ping_utils import ping_host
 
 def computer_wol():
     try:
@@ -26,3 +27,8 @@ def computer_wol():
             "success": False,
             "message": f"Failed to send packet: {str(e)}"
         }
+
+def is_computer_online() -> bool:
+    if not AGENT_IP:
+        return False
+    return ping_host(AGENT_IP)

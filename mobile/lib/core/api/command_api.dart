@@ -6,5 +6,6 @@ abstract class CommandApi {
   Future<ApiResponse> powerOnComputer();
   Future<ApiResponse> powerOffComputer();
   Future<bool> checkAgentHealth();
+  Future<bool> checkComputerOnline();
   Future<Map<String, String>> getCommandsStatus(List<String> commands);
 }

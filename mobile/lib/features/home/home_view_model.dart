@@ -14,6 +14,7 @@ class HomeViewModel extends ChangeNotifier {
 
   bool isConfigured = false;
   bool computerOnline = false;
+  bool agentOnline = false;
   bool isExecutingCommand = false;
   List<CommandCardModel> commandCards = [];
 
@@ -53,10 +54,12 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future<void> checkAllStatuses() async {
-    computerOnline = await _commandApi!.checkAgentHealth();
+    computerOnline = await _commandApi!.checkComputerOnline();
+    print('Computer online: $computerOnline');
+    agentOnline = await _commandApi!.checkAgentHealth();
     notifyListeners();
 
-    if (computerOnline && commandCards.isNotEmpty) {
+    if (computerOnline && agentOnline && commandCards.isNotEmpty) {
       final serviceNames = commandCards.map((c) => c.service).toList();
       final statuses = await _commandApi!.getCommandsStatus(serviceNames);
 
@@ -99,7 +102,7 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future<void> executeCommand(CommandCardModel command) async {
-    if (!computerOnline || isExecutingCommand) return;
+    if (!computerOnline || !agentOnline || isExecutingCommand) return;
 
     toggleExecutingState();
 
@@ -127,11 +130,12 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   void powerOnComputer() async {
+    print('oi');
+    computerOnline = await _commandApi!.checkComputerOnline();
+    print('Computer online: $computerOnline');
     await _commandApi!.powerOnComputer()
       .then((response) {
         if (response.success) {
-          computerOnline = true;
-          notifyListeners();
           Future.delayed(const Duration(seconds: 5), () => checkAllStatuses());
         }
       });
@@ -141,7 +145,6 @@ class HomeViewModel extends ChangeNotifier {
     await _commandApi!.powerOffComputer()
       .then((response) {
         if (response.success) {
-          computerOnline = false;
           commandCards = commandCards
             .map((c) => c.copyWith(isRunning: false))
             .toList();

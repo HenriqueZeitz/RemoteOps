@@ -98,14 +98,14 @@ pip install -r requirements.txt
 
 ```env
 API_KEY=chave_secreta_backend
-AGENT_BASE_URL=http://localhost:8001
+AGENT_IP=ip_do_agent
 AGENT_TOKEN=chave_secreta_agent
 ```
 
 | Variável | Descrição |
 | --- | --- |
 | `API_KEY` | Token para acessar o backend |
-| `AGENT_BASE_URL` | URL do Agent |
+| `AGENT_IP` | URL do Agent |
 | `AGENT_TOKEN` | Token usado para autenticar no Agent |
 
 ---

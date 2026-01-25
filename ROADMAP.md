@@ -106,13 +106,11 @@ sem overengineering.
 ---
 
 ## 🔄 Fase 7 – Evoluções Futuras (Opcional)
-- [ ] Status persistente do backend/servidor
-- [ ] Um único botão ligar/desligar baseado no status
+- [X] Status persistente do backend/servidor
+- [X] Um único botão ligar/desligar baseado no status
 - [ ] Histórico de ações executadas
 - [ ] Autenticação simples
-- [ ] Configuração remota de comandos
 - [ ] Dockerização do backend no Raspberry
-- [ ] Deploy em servidor cloud
 - [ ] Notificações push
 
 ---
@@ -121,7 +119,6 @@ sem overengineering.
 - [ ] Integração futura com outros dispositivos
 - [ ] Execução agendada de comandos
 - [ ] Templates de comandos
-- [ ] Dashboard web
 
 ---
 

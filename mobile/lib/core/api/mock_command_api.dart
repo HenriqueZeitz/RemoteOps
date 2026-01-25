@@ -71,4 +71,10 @@ class MockCommandApi implements CommandApi {
   @override
   Future<Map<String, String>> getCommandsStatus(List<String> commands) {
     throw UnimplementedError();
-  }}
+  }
+
+  @override
+  Future<bool> checkComputerOnline() async {
+    throw UnimplementedError();
+  }
+}
