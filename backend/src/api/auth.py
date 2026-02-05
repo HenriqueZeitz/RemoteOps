@@ -15,18 +15,3 @@ def verify_bearer_token(credentials: HTTPAuthorizationCredentials = Depends(secu
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Unauthorized"
         )
-
-# def verify_bearer_token(authorization: str = Header(...)):
-#     if not authorization.startswith("Bearer "):
-#         raise HTTPException(
-#             status_code=401,
-#             detail="Invalid authorization scheme"
-#         )
-    
-#     token = authorization.replace("Bearer ", "", 1)
-
-#     if token != SECRET_KEY:
-#         raise HTTPException(
-#             status_code=401, 
-#             detail="Unauthorized"
-#         )

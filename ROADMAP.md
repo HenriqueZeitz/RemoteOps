@@ -76,10 +76,9 @@ sem overengineering.
 ## 🔐 Fase 4 – Conectividade e Segurança
 ### Objetivo: acesso remoto seguro
 
-- [ ] Configurar WireGuard no Raspberry Pi
-- [ ] Testar acesso via VPN no celular (app externo)
+- [X] Configurar Tailscale no Raspberry Pi
+- [X] Testar acesso via VPN no celular (app externo)
 - [ ] Garantir que API só funcione via VPN
-- [ ] Documentar configuração da VPN
 - [ ] Criar um rate limit de requisições por IP
 
 ---

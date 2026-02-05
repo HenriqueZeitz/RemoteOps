@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/core/api/command_api.dart';
@@ -8,7 +10,7 @@ import 'package:mobile/features/home/models/command_card_model.dart';
 
 const bool USE_MOCK_API = false;
 
-class HomeViewModel extends ChangeNotifier {
+class HomeViewModel extends ChangeNotifier with WidgetsBindingObserver {
   final _storageService = LocalStorageService();
   CommandApi? _commandApi;
 
@@ -18,8 +20,25 @@ class HomeViewModel extends ChangeNotifier {
   bool isExecutingCommand = false;
   List<CommandCardModel> commandCards = [];
 
+  Timer? _statusTimer;
+  final Duration _checkInterval = const Duration(seconds: 30);
+
   HomeViewModel() {
+    WidgetsBinding.instance.addObserver(this);
     _initialize();
+  }
+
+  @override
+  void dispose() {
+    stopStatusMonitoring();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) stopStatusMonitoring();
+    else if (state == AppLifecycleState.resumed) startStatusMonitoring();
   }
 
   Future<void> _initialize() async {
@@ -35,18 +54,26 @@ class HomeViewModel extends ChangeNotifier {
           token: settings['token']!,
         );
       isConfigured = true;
-      notifyListeners();
-
       await _loadCommands();
-      try {
-        await checkAllStatuses();
-      } catch (e) {
-        debugPrint("Erro ao checar status inicial: $e");
-      }
+      startStatusMonitoring();
+      await checkAllStatuses();
+      notifyListeners();
     } else {
       isConfigured = false;
       notifyListeners();
     }
+  }
+
+  void startStatusMonitoring() {
+    _statusTimer?.cancel();
+    _statusTimer = Timer.periodic(_checkInterval, (timer) {
+      if (isConfigured && !isExecutingCommand) checkAllStatuses();
+    });
+  }
+
+  void stopStatusMonitoring() {
+    _statusTimer?.cancel();
+    _statusTimer = null;
   }
 
   Future<void> updateSettings(String ip, String token) async {
@@ -55,24 +82,30 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future<void> checkAllStatuses() async {
-    computerOnline = await _commandApi!.checkComputerOnline();
-    agentOnline = await _commandApi!.checkAgentHealth();
-    notifyListeners();
+    if (_commandApi == null) return;
 
-    if (computerOnline && agentOnline && commandCards.isNotEmpty) {
-      final serviceNames = commandCards.map((c) => c.service).toList();
-      final statuses = await _commandApi!.getCommandsStatus(serviceNames);
+    try {
+      computerOnline = await _commandApi!.checkComputerOnline();
+      agentOnline = await _commandApi!.checkAgentHealth();
 
-      if (statuses.isNotEmpty) {
-        commandCards = commandCards.map((card) {
-          final status = statuses[card.service];
-          return card.copyWith(isRunning: status == 'running');
-        }).toList();
+      if (computerOnline && agentOnline && commandCards.isNotEmpty) {
+        final serviceNames = commandCards.map((c) => c.service).toList();
+        final statuses = await _commandApi!.getCommandsStatus(serviceNames);
 
-        await _storageService.saveCommands(commandCards);
-        notifyListeners();
+        if (statuses.isNotEmpty) {
+          commandCards = commandCards.map((card) {
+            final status = statuses[card.service];
+            return card.copyWith(isRunning: status == 'running');
+          }).toList();
+
+          await _storageService.saveCommands(commandCards);
+        }
       }
+    } catch (e) {
+      computerOnline = false;
+      agentOnline = false;
     }
+    notifyListeners();
   }
 
   Future<void> addCommand(CommandCardModel command) async {
@@ -127,24 +160,37 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   void powerOnComputer() async {
-    computerOnline = await _commandApi!.checkComputerOnline();
-    await _commandApi!.powerOnComputer()
-      .then((response) {
+    if (isExecutingCommand) return;
+
+    toggleExecutingState();
+    try {
+      await _commandApi!.powerOnComputer().then((response) {
         if (response.success) {
-          Future.delayed(const Duration(seconds: 5), () => checkAllStatuses());
+            Future.delayed(const Duration(seconds: 5), () => checkAllStatuses());
         }
       });
+    } finally {
+      toggleExecutingState();
+    }
   }
 
   void powerOffComputer() async {
-    await _commandApi!.powerOffComputer()
-      .then((response) {
-        if (response.success) {
-          commandCards = commandCards
-            .map((c) => c.copyWith(isRunning: false))
-            .toList();
-          notifyListeners();
-        }
-      });
+    if (isExecutingCommand) return;
+
+    toggleExecutingState();
+    try {
+      await _commandApi!.powerOffComputer()
+        .then((response) {
+          if (response.success) {
+            computerOnline = false;
+            commandCards = commandCards
+              .map((c) => c.copyWith(isRunning: false))
+              .toList();
+            notifyListeners();
+          }
+        });
+    } finally {
+      toggleExecutingState();
+    }
   }
 }
