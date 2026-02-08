@@ -23,12 +23,17 @@ COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends curl \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get install -y --no-install-recommends \
+    curl \
+    iputils-ping \
+    libnss-mdns \
+    && rm -rf /var/lib/apt/lists/* \
+    && sed -i 's/hosts:          files dns/hosts:          files mdns4_minimal [NOTFOUND=return] dns mdns4/' /etc/nsswitch.conf
 
 COPY . .
 RUN useradd -m raspberrypi-middleware \
-    && chown -R raspberrypi-middleware:raspberrypi-middleware /app
+    && chown -R raspberrypi-middleware:raspberrypi-middleware /app \
+    && chmod u+s /bin/ping
 USER raspberrypi-middleware
 
 EXPOSE 8000

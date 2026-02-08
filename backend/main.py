@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.api.routes import router
+from src.api.routes import router, public_router
 
 
 app = FastAPI(
@@ -7,4 +7,5 @@ app = FastAPI(
     version="1.0.0",
 )
 
+app.include_router(public_router)
 app.include_router(router)

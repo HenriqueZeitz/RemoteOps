@@ -8,8 +8,9 @@ from src.models.command_request import CommandRequest
 
 
 router = APIRouter(dependencies=[Depends(verify_bearer_token)])
+public_router = APIRouter()
 
-@router.get("/health")
+@public_router.get("/health")
 def health():
     return {"status": "ok"}
 
