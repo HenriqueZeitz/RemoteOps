@@ -25,7 +25,7 @@ def stop_windows_process(command_def):
     for proc in psutil.process_iter(['name', 'cwd']):
         if proc.info['name'] == command_def["process_name"]:
             if command_def["dir"] in proc.info['cwd']:
-                logger.info(f"Effective stop command")
+                logger.info(f"Serviço {proc.info['name']} finalizado com sucesso.")
                 proc.kill()
 
 def stop_linux_process(command_def):
@@ -35,7 +35,6 @@ def stop_linux_process(command_def):
             return True
 
 def stop_command(command_def):
-    logger.info(f"Stoping command: {command_def}", extra={"COMMAND_DEF": command_def})
     system = platform.system().lower()
     if system == "windows":
         stop_windows_process(command_def)

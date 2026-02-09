@@ -88,7 +88,7 @@ sem overengineering.
 
 - [X] Ligar computador via Wake-on-LAN
 - [X] Executar comando para iniciar backend local
-- [X] Executar comando para iniciar servidor (ex: Minecraft)
+- [X] Executar comando para iniciar serviços (ex: Backend, servidor de jogo)
 - [X] Retorno visual simples (sucesso / erro)
 
 ---
@@ -109,7 +109,7 @@ sem overengineering.
 - [X] Um único botão ligar/desligar baseado no status
 - [ ] Histórico de ações executadas
 - [ ] Autenticação simples
-- [ ] Dockerização do backend no Raspberry
+- [X] Dockerização do backend no Raspberry
 - [ ] Notificações push
 
 ---

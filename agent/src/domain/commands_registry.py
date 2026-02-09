@@ -12,7 +12,6 @@ def load_commands_registry():
     if _REGISTRY_CACHE is not None:
         return _REGISTRY_CACHE
     
-    logger.info("Loading commands registry from file", extra={"CommandsDirectory": COMMANDS_DIR})
     registry_path = os.path.join(COMMANDS_DIR, "commands_registry.json")
     if not os.path.exists(registry_path):
         raise RuntimeError("Commands registry file not found")

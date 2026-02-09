@@ -39,30 +39,38 @@ backend/
 │
 ├── main.py
 ├── requirements.txt
-├── .env                     # Variáveis de ambiente
+├── .env                           # Variáveis de ambiente
 │
 ├── src/
 │   ├── api/
-│   │   ├── routes.py        # Rotas públicas do backend
-│   │   └── auth.py          # Autenticação Bearer Token
-│   │
-│   ├── domain/
-│   │   └── computer.py      # Domínio
+│   │   ├── routes.py                   # Rotas públicas do backend
+│   │   └── auth.py                     # Autenticação Bearer Token
 │   │
 │   ├── clients/
-│   │   └── agent_client.py  # Cliente HTTP para comunicação com o Agent
+│   │   └── agent_client.py             # Cliente HTTP para comunicação com o Agent
+│   │
+│   ├── domain/
+│   │   └── computer.py                 # Domínio
+│   │
+│   ├── infra/
+│   │   ├── logging/
+│   │   │   ├── discord_handler.py      # Configuração da mensagem de log para o Discord
+│   │   │   └── setup.py                # Configura o handler para o console e para o Discord
+│   │   └── ping_utils.py               # Testa o status do computador
 │   │
 │   ├── models/
 │   │   ├── command_request.py
 │   │   └── status_request.py
 │   │
-│   └── config.py            # Configurações
+│   └── config.py                       # Configurações
 
 ```
 
 ---
 
 ## ⚙️ Configuração
+
+**As instruções 1 e 2 podem ser ignoradas caso use docker**
 
 ### 1️⃣ Criar ambiente virtual (recomendado)
 
@@ -95,18 +103,22 @@ pip install -r requirements.txt
 ---
 
 ### 3️⃣ Criar arquivo .env
-
+**Caso use docker, sempre que houver $ deve ser usado $$**
 ```env
 API_KEY=chave_secreta_backend
 AGENT_IP=ip_do_agent
+AGENT_MAC=endereco_mac_do_agent
 AGENT_TOKEN=chave_secreta_agent
+DISCORD_BOT_URL=url_do_webhook_do_discord
 ```
 
 | Variável | Descrição |
 | --- | --- |
 | `API_KEY` | Token para acessar o backend |
 | `AGENT_IP` | URL do Agent |
+| `AGENT_MAC` | Endereço MAC do computador |
 | `AGENT_TOKEN` | Token usado para autenticar no Agent |
+| `DISCORD_BOT_URL` | URL do webhook do discord, usado para enviar logs |
 
 ---
 
@@ -128,7 +140,7 @@ http://localhost:8000
 
 ## 🔐 Autenticação
 
-Todas as rotas exigem autenticação via **Bearer Token**.
+Todas as rotas (exceto /health) exigem autenticação via **Bearer Token**.
 
 ### Exemplo (Postman)
 - Aba Authorization
@@ -210,8 +222,8 @@ Body:
 - [X] Autenticação Bearer Token
 - [X] Integração com Agent
 - [ ] Rate limit por IP
-- [ ] Logs estruturados
-- [ ] Dockerização
+- [X] Logs estruturados
+- [X] Dockerização
 - [X] Deploy no Raspberry Pi
 
 ## 🧠 Observações
