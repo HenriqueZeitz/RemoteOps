@@ -9,12 +9,9 @@ HEADERS = {
 }
 
 def check_agent_health():
-    try:
-        resp = requests.get(f"{AGENT_BASE_URL}/health", headers=HEADERS, timeout=3)
-        resp.raise_for_status()
-        return resp.json()
-    except Exception as e:
-        logger.error(f"Falha ao checar o health do agent: {e}")
+    resp = requests.get(f"{AGENT_BASE_URL}/health", headers=HEADERS, timeout=3)
+    resp.raise_for_status()
+    return resp.json()
 
 
 def agent_execute(req):

@@ -39,4 +39,4 @@ def is_computer_online():
             return False
         return ping_host(AGENT_IP)
     except Exception as e:
-        logger.error(f"Falha ao testar o status do computador: {e}")
+        logger.critical(f"Erro crítico ao testar o status do computador: {e}")

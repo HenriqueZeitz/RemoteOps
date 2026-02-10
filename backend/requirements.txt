@@ -3,3 +3,5 @@ uvicorn>=0.40.0
 python-dotenv>=1.2.1
 requests>=2.32.5
 wakeonlan>=3.1.0
+
+hz_utils @ git+https://github.com/HenriqueZeitz/hz-python-utils.git

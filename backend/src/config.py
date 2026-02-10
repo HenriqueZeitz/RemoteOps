@@ -14,4 +14,4 @@ AGENT_BASE_URL = f"http://{AGENT_IP}:9000"
 
 API_KEY = os.getenv("API_KEY", "")
 
-DISCORD_BOT_URL = os.getenv("DISCORD_BOT_URL", "")
+DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL", "")

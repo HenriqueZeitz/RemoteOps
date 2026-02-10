@@ -50,7 +50,6 @@ remoteops/
 ├── backend/ # Backend FastAPI (Raspberry Pi)
 ├── agent/ # Agent de execução no PC
 ├── mobile/ # App mobile Flutter
-├── docs/ # Documentação adicional (arquitetura, decisões)
 ├── README.md
 ├── ROADMAP.md
 ├── LICENSE
@@ -61,7 +60,7 @@ remoteops/
 
 ## 🚀 Status do Projeto
 
-🟡 **Em fase de planejamento e estruturação inicial**
+🟢 **MVP em fase de testes**
 
 O roadmap completo, com fases e funcionalidades planejadas, pode ser encontrado em:
 - [`ROADMAP.md`](./ROADMAP.md)
@@ -83,7 +82,7 @@ O roadmap completo, com fases e funcionalidades planejadas, pode ser encontrado 
 - **Mobile:** Flutter
 - **Backend:** Python + FastAPI
 - **Agent:** Python
-- **VPN:** WireGuard
+- **VPN:** Tailscale
 - **Hardware:** Raspberry Pi
 - **Versionamento:** Git + GitHub
 
