@@ -9,7 +9,9 @@ from src.models.status_request import StatusRequest
 from src.models.command_request import CommandRequest
 from src.infra.process_utils import is_process_running
 from src.domain.commands_registry import get_command_definition
-from src.infra.logger import logger
+import logging
+
+logger = logging.getLogger(__name__)
 
 def run_command(command, dir):
     system = platform.system().lower()
@@ -17,7 +19,8 @@ def run_command(command, dir):
     script_path = os.path.join(COMMANDS_DIR, f"{command}{ext}")
 
     if system == "windows":
-        return subprocess.Popen(["cmd", "/c", script_path], cwd=dir, shell=True)
+        subprocess.Popen(["cmd", "/c", script_path], cwd=dir, shell=True)
+        return logger.info(f"Comando '{command}' iniciado com sucesso.")
     else:
         return subprocess.Popen(["bash", script_path], cwd=dir, start_new_session=True)
 
@@ -25,8 +28,8 @@ def stop_windows_process(command_def):
     for proc in psutil.process_iter(['name', 'cwd']):
         if proc.info['name'] == command_def["process_name"]:
             if command_def["dir"] in proc.info['cwd']:
-                logger.info(f"Serviço {proc.info['name']} finalizado com sucesso.")
                 proc.kill()
+                logger.info(f"Serviço {proc.info['name']} finalizado com sucesso.")
 
 def stop_linux_process(command_def):
     for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
@@ -44,6 +47,7 @@ def stop_command(command_def):
 def execute_command_handler(req: CommandRequest):
     command_def = get_command_definition(req.command)
     if not command_def:
+        logger.error(f"Comando '{req.command}' não encontrado no registro")
         return {
             "status": "error",
             "message": "Command not registered"

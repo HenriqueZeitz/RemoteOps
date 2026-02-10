@@ -1,8 +1,9 @@
+import logging
 import json
 import os
 from config import COMMANDS_DIR
 
-from src.infra.logger import logger
+logger = logging.getLogger(__name__)
 
 _REGISTRY_CACHE = None
 
@@ -14,7 +15,8 @@ def load_commands_registry():
     
     registry_path = os.path.join(COMMANDS_DIR, "commands_registry.json")
     if not os.path.exists(registry_path):
-        raise RuntimeError("Commands registry file not found")
+        logger.critical("Arquivo de registro de comandos não encontrado: %s", registry_path)
+        raise RuntimeError("Arquivo de registro de comandos não encontrado")
     
     with open(registry_path, "r", encoding="utf-8") as f:
         _REGISTRY_CACHE = json.load(f)

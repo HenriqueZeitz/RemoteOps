@@ -6,6 +6,11 @@ from src.models.command_request import CommandRequest
 from src.models.status_request import StatusRequest
 
 router = APIRouter(dependencies=[Depends(verify_bearer_token)])
+router_public = APIRouter()
+
+@router_public.get("/health")
+def health_check():
+    return health_check_handler()
 
 @router.post("/commands/status")
 def commands_status(req: StatusRequest):
@@ -18,7 +23,3 @@ def execute_command(req: CommandRequest):
 @router.post("/computer/power/off")
 def power_off():
     return power_off_handler()
-
-@router.get("/health")
-def health_check():
-    return health_check_handler()

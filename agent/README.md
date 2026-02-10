@@ -16,11 +16,11 @@ Ele aceita apenas comandos previamente registrados em um arquivo de configuraç�
 
 ## 📦 Tecnologias
 
-- Python 3.10+
+- Python 3.13+
 - FastAPI
 - Uvicorn
 - subprocess (execução controlada)
-- Pydantic
+- hz_utils (logger)
 
 ---
 
@@ -28,26 +28,27 @@ Ele aceita apenas comandos previamente registrados em um arquivo de configuraç�
 
 ```
 agent/
-├── main.py
-├── .env
-├── requirements.txt
 ├── commands/
+│   ├── commands_registry.json
+│   └── *.bat / *.sh
+├── src/
+│   ├── api/
+│   │   ├── auth.py
+│   │   └── routes.py
+│   ├── handlers/
+│   │   └── commands_handler.py
+│   ├── domain/
+│   │   ├── commands_registry.py
+│   │   └── services_state.py
+│   ├── infra/
+│   │   └── process_utils.py
+│   └── models/
+│       ├── command_request.py
+│       └── status_request.py
+├── .env
+├── main.py
 ├── config.py
-│ ├── commands_registry.json
-│ └── *.bat / *.sh
-└── src/
-  ├── api/
-  │ └── routes.py
-  ├── handlers/
-  │ └── commands_handler.py
-  ├── domain/
-  │ └── commands_registry.py
-  │ └── services_state.py
-  ├── infra/
-  │ └── process_utils.py
-  └── models/
-    ├── command_request.py
-    └── status_request.py
+└── requirements.txt
 ```
 
 ---
@@ -74,11 +75,13 @@ pip install -r requirements.txt
 
 ```env
 API_KEY=chave_secreta
+DISCORD_WEBHOOK_URL=url_do_webhook_do_discord
 ```
 
 | Variável | Descrição |
 | --- | --- |
 | `API_KEY` | Token para acessar o agent |
+| `DISCORD_WEBHOOK_URL` | URL do webhook do discord, usado para enviar logs |
 
 ---
 
@@ -92,15 +95,15 @@ Os comandos aceitos pelo agent devem ser definidos em:
 
 #### Exemplo
 
-```
+```json
 {
-  "start_backend": {
-    "process_name": "python.exe"
-  },
-  "start_mongodb": {
-    "process_name": "mongod.exe"
-  }
+    "start_backend": {
+        "process_name": "python.exe"
+        "dir": "BACKEND_PATH"
+        "start": "uvicorn main:app --host 0.0.0.0 --port 8000"
+    }
 }
+
 ```
 
 ### 📌 Para cada comando registrado:
@@ -115,9 +118,9 @@ Linux/macOS: .sh
 
 #### Exemplo:
 
-```
-commands/start_backend.bat
-commands/start_mongodb.bat
+```bash
+commands/start_backend.sh       # Linux/macOS
+commands/start_backend.bat      # Windows
 ```
 
 ---
@@ -149,15 +152,16 @@ http://localhost:9000/docs
 
 POST /commands/execute
 
-```
+```json
 {
-    "command": "command_name"
+    "command": "command_name",
+    "start_command": true           // False para finalizar
 }
 ```
 
 Resposta de sucesso:
 
-```
+```json
 {
     "status": "success",
     "data": {
@@ -172,7 +176,7 @@ Resposta de sucesso:
 
 POST /commands/status
 
-```
+```json
 {
     "commands": ["command_name_1", "command_name_2", "not_a_command"]
 }
@@ -180,7 +184,7 @@ POST /commands/status
 
 Resposta:
 
-```
+```json
 {
     "status": "success",
     "data": {
@@ -197,22 +201,9 @@ Resposta:
 
 POST /computer/power/off
 
-Restrições:
-
-O desligamento é bloqueado se houver serviços em execução
-
-Resposta quando bloqueado:
-
-```
-{
-    "status": "blocked",
-    "message": "services are still running"
-}
-```
-
 Resposta de sucesso:
 
-```
+```json
 {
     "status": "shutting_down",
     "data": {
@@ -269,8 +260,8 @@ O agent nunca é exposto diretamente à internet.
 
 ## 🛠️ Roadmap futuro (Agent)
 
-- [ ] Autenticação via token
-- [ ] Health check
+- [X] Autenticação via token
+- [X] Health check
 
 ---
 

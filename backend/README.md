@@ -109,7 +109,7 @@ API_KEY=chave_secreta_backend
 AGENT_IP=ip_do_agent
 AGENT_MAC=endereco_mac_do_agent
 AGENT_TOKEN=chave_secreta_agent
-DISCORD_BOT_URL=url_do_webhook_do_discord
+DISCORD_WEBHOOK_URL=url_do_webhook_do_discord
 ```
 
 | Variável | Descrição |
@@ -118,7 +118,7 @@ DISCORD_BOT_URL=url_do_webhook_do_discord
 | `AGENT_IP` | URL do Agent |
 | `AGENT_MAC` | Endereço MAC do computador |
 | `AGENT_TOKEN` | Token usado para autenticar no Agent |
-| `DISCORD_BOT_URL` | URL do webhook do discord, usado para enviar logs |
+| `DISCORD_WEBHOOK_URL` | URL do webhook do discord, usado para enviar logs |
 
 ---
 
